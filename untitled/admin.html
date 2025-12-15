@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Renaissance Restaurant — Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #111111;
+            --bg-darker: #060606;
+            --bg-section: #1a1a1a;
+            --accent: #c58a46;
+            --accent-soft: rgba(197, 138, 70, 0.5);
+            --text-main: #f2ebe4;
+            --text-muted: #c0b4a6;
+            --btn-bg: #c58a46;
+            --btn-bg-hover: #e0a75f;
+            --border-radius: 1.5rem;
+            --transition-fast: 0.2s ease;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER (как на других страницах) */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.9),
+                    rgba(0, 0, 0, 0.7)
+            );
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .main-nav a {
+            position: relative;
+            color: var(--text-main);
+            letter-spacing: 0.02em;
+            padding-bottom: 4px;
+        }
+
+        .main-nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width var(--transition-fast);
+        }
+
+        .main-nav a:hover::after { width: 100%; }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .logo-wrapper img {
+            width: 70%;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .nav-toggle { display: none; }
+        .nav-toggle-label { display: none; }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+            min-height: 40vh;
+            color: #ffffff;
+            background-image: url("img/Admin.png");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                    linear-gradient(
+                            to bottom,
+                            rgba(0, 0, 0, 0.35),
+                            rgba(0, 0, 0, 0.9)
+                    );
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        .admin-title {
+            font-family: "Playfair Display", serif;
+            font-size: clamp(2.4rem, 4vw + 1rem, 3.2rem);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* ADMIN LAYOUT */
+
+        .admin-section {
+            padding: 40px 0 70px;
+            background: var(--bg-dark);
+        }
+
+        .admin-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .admin-block {
+            background: var(--bg-section);
+            padding: 24px 20px 28px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .admin-block h2 {
+            font-family: "Playfair Display", serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .admin-subtitle {
+            margin: 20px 0 12px;
+            font-weight: 600;
+        }
+
+        .admin-form {
+            margin-bottom: 10px;
+        }
+
+        .admin-form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .admin-input,
+        .admin-textarea {
+            flex: 1;
+            padding: 8px 10px;
+            background: #333333;
+            border-radius: 3px;
+            border: 1px solid #444444;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        .admin-textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .admin-form-submit {
+            padding-inline: 20px;
+            white-space: nowrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background-color var(--transition-fast),
+            color var(--transition-fast),
+            border-color var(--transition-fast),
+            transform var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: var(--btn-bg);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .admin-btn {
+            background: #333;
+            color: #f2ebe4;
+            border-radius: 4px;
+            padding-inline: 14px;
+        }
+
+        .admin-btn--danger {
+            background: #5c2424;
+        }
+
+        .admin-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .admin-product-item,
+        .admin-staff-item {
+            padding: 10px 12px;
+            background: #262626;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .admin-product-item__main,
+        .admin-staff-item__main {
+            flex: 1;
+        }
+
+        .admin-product-item__actions,
+        .admin-staff-item__actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .admin-staff-item__created {
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .admin-mobile-warning {
+            display: none;
+            text-align: center;
+            padding: 40px 0 0;
+            color: var(--text-muted);
+        }
+
+        /* FOOTER */
+
+        .site-footer {
+            background: var(--bg-darker);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 32px 0 24px;
+            font-size: 0.85rem;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-hours p { color: var(--text-muted); }
+        .footer-hours p + p { margin-top: 4px; }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .footer-logo img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .footer-social a {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: background-color var(--transition-fast),
+            color var(--transition-fast),
+            border-color var(--transition-fast);
+        }
+
+        .footer-social a:hover {
+            background: var(--accent);
+            color: #1a1a1a;
+            border-color: transparent;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 18px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* Только ПК: на ширине < 1024 скрываем панель и показываем предупреждение */
+
+        @media (max-width: 1024px) {
+            .admin-layout { display: none; }
+            .admin-mobile-warning { display: block; }
+
+            .top-bar { padding-inline: 16px; }
+            .main-nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px 20px;
+                background: rgba(0, 0, 0, 0.96);
+                display: none;
+            }
+
+            .nav-left,
+            .nav-right {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+
+            .nav-toggle-label {
+                display: flex;
+                width: 32px;
+                height: 32px;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .nav-toggle-label span,
+            .nav-toggle-label span::before,
+            .nav-toggle-label span::after {
+                content: "";
+                position: absolute;
+                width: 22px;
+                height: 2px;
+                background: #ffffff;
+                transition: transform 0.2s ease, opacity 0.2s ease;
+            }
+
+            .nav-toggle-label span::before { transform: translateY(-6px); }
+            .nav-toggle-label span::after { transform: translateY(6px); }
+
+            .nav-toggle:checked + .nav-toggle-label span { transform: rotate(45deg); }
+            .nav-toggle:checked + .nav-toggle-label span::before { transform: rotate(-90deg); }
+            .nav-toggle:checked + .nav-toggle-label span::after { opacity: 0; }
+
+            .nav-toggle:checked ~ .main-nav { display: flex; }
+        }
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <div class="top-bar container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+        <label for="nav-toggle" class="nav-toggle-label" aria-label="Открыть меню">
+            <span></span>
+        </label>
+
+        <nav class="main-nav">
+            <ul class="nav-left">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="checkout.html">Бронь</a></li>
+                <li><a href="menu.html">Меню</a></li>
+            </ul>
+
+            <div class="logo-wrapper">
+                <img src="img/Logo.svg" alt="Renaissance" />
+            </div>
+
+            <ul class="nav-right">
+                <li>
+                    <a href="#" id="admin-link" data-open-auth="login">Админ</a>
+                </li>
+
+                <li id="nav-register-item">
+                    <a href="#" data-open-auth="register">Регистрация</a>
+                </li>
+                <li id="nav-logout-item" style="display:none;">
+                    <a href="#" id="logout-link">Выход</a>
+                </li>
+                <li>
+                    <a href="profile.html" id="profile-link">Профиль</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-inner">
+            <h1 class="admin-title">Admin</h1>
+        </div>
+    </section>
+
+    <section class="admin-section" data-admin-page>
+        <div class="container">
+            <div class="admin-layout">
+                <!-- БЛОК ТОВАРОВ -->
+                <div class="admin-block">
+                    <h2>Добавить / Редактировать товар</h2>
+
+                    <form id="admin-product-form" class="admin-form">
+                        <input type="hidden" id="admin-product-id" />
+
+                        <div class="admin-form-row">
+                            <input type="text" id="admin-product-title" class="admin-input" placeholder="Название" />
+                            <input type="text" id="admin-product-category" class="admin-input" placeholder="Категория" />
+                        </div>
+
+                        <div class="admin-form-row">
+                            <input type="number" id="admin-product-price" class="admin-input" placeholder="Цена" step="0.01" min="0" />
+                        </div>
+
+                        <div class="admin-form-row">
+                            <textarea id="admin-product-description" class="admin-textarea" placeholder="Описание"></textarea>
+                        </div>
+
+                        <div class="admin-form-row">
+                            <input type="text" id="admin-product-image" class="admin-input" placeholder="URL изображения" />
+                            <button type="submit" class="btn btn-primary admin-form-submit">Сохранить</button>
+                        </div>
+                    </form>
+
+                    <h3 class="admin-subtitle">Список товаров</h3>
+                    <div id="admin-products-list" class="admin-list admin-list--products">
+                        <!-- список товаров рендерит JS -->
+                    </div>
+                </div>
+
+                <!-- БЛОК ПЕРСОНАЛА -->
+                <div class="admin-block">
+                    <h2>Персонал</h2>
+
+                    <form id="admin-staff-form" class="admin-form admin-form--staff">
+                        <input type="hidden" id="admin-staff-id" />
+
+                        <div class="admin-form-row">
+                            <input type="text" id="admin-staff-name" class="admin-input" placeholder="Имя, фамилия" />
+                            <input type="text" id="admin-staff-role" class="admin-input" placeholder="Роль" />
+                            <button type="submit" class="btn btn-primary admin-form-submit">Сохранить</button>
+                        </div>
+                    </form>
+
+                    <div id="admin-staff-list" class="admin-list admin-list--staff">
+                        <!-- сотрудники рендерятся JS -->
+                    </div>
+                </div>
+            </div>
+
+            <p class="admin-mobile-warning">
+                Админ-панель доступна только на десктопе (экран шире 1024px).
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-content">
+        <div class="footer-hours">
+            <p>Понедельник – Четверг: 9am – 10pm</p>
+            <p>Пятница – Суббота: 10am – 11pm</p>
+            <p>Воскресенье: 11am – 9pm</p>
+        </div>
+
+        <div class="footer-logo">
+            <img src="img/Logo.svg" alt="Renaissance" />
+            <div class="footer-bottom">
+                © 2025 Renaissance Restaurant
+            </div>
+        </div>
+
+        <div class="footer-social">
+            <a href="#" aria-label="Twitter">t</a>
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">in</a>
+            <a href="#" aria-label="YouTube">▶</a>
+        </div>
+    </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

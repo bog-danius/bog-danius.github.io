@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Renaissance Restaurant — Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-dark: #111111;
+            --bg-darker: #060606;
+            --bg-section: #1a1a1a;
+            --accent: #c58a46;
+            --accent-soft: rgba(197, 138, 70, 0.5);
+            --text-main: #f2ebe4;
+            --text-muted: #c0b4a6;
+            --btn-bg: #c58a46;
+            --btn-bg-hover: #e0a75f;
+            --border-radius: 1.5rem;
+            --transition-fast: 0.2s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ---------- HEADER ---------- */
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.9),
+                    rgba(0, 0, 0, 0.7)
+            );
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .main-nav a {
+            position: relative;
+            color: var(--text-main);
+            letter-spacing: 0.02em;
+            padding-bottom: 4px;
+        }
+
+        .main-nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width var(--transition-fast);
+        }
+
+        .main-nav a:hover::after {
+            width: 100%;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .logo-wrapper img {
+            width: 70%;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        /* ---------- MOBILE NAV ---------- */
+
+        .nav-toggle {
+            display: none;
+        }
+
+        .nav-toggle-label {
+            display: none;
+            width: 32px;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-toggle-label span,
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 2px;
+            background: #ffffff;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .nav-toggle-label span::before {
+            transform: translateY(-6px);
+        }
+
+        .nav-toggle-label span::after {
+            transform: translateY(6px);
+        }
+
+        .nav-toggle:checked + .nav-toggle-label span {
+            transform: rotate(45deg);
+        }
+
+        .nav-toggle:checked + .nav-toggle-label span::before {
+            transform: rotate(-90deg);
+        }
+
+        .nav-toggle:checked + .nav-toggle-label span::after {
+            opacity: 0;
+        }
+
+        /* ---------- BUTTONS ---------- */
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: background-color var(--transition-fast),
+            color var(--transition-fast),
+            border-color var(--transition-fast),
+            transform var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: var(--btn-bg);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-full {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ---------- HERO (Menu) ---------- */
+
+        .hero {
+            position: relative;
+            min-height: 48vh;
+            color: #ffffff;
+            background-image: url("img/Shop.png"); /* замени путь, если другое имя */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                    linear-gradient(
+                            to bottom,
+                            rgba(0, 0, 0, 0.35),
+                            rgba(0, 0, 0, 0.9)
+                    );
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        .menu-title {
+            font-family: "Playfair Display", serif;
+            font-size: clamp(2.4rem, 4vw + 1rem, 3.2rem);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* ---------- MENU SECTION ---------- */
+
+        .menu-section {
+            padding: 40px 0 70px;
+            background: var(--bg-dark);
+        }
+
+        .menu-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .menu-toolbar__icon {
+            font-size: 1.1rem;
+            margin-right: 6px;
+        }
+
+        .menu-sort {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-sort__select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 8px 36px 8px 14px;
+            border-radius: 2px;
+            border: 1px solid #333333;
+            background: #202020;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .menu-sort::after {
+            content: "▾";
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            pointer-events: none;
+            color: #ffffff;
+        }
+
+        /* GRID */
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+        }
+
+        .product-card {
+            background: #181818;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 18px 18px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 266px;
+            height: 470px;
+        }
+
+        .product-card__image-wrapper {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .product-card__image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card__title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .product-card__price {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 14px;
+        }
+
+        .product-card__btn {
+            margin-top: auto;
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        .site-footer {
+            background: var(--bg-darker);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 32px 0 24px;
+            font-size: 0.85rem;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-hours p {
+            color: var(--text-muted);
+        }
+
+        .footer-hours p + p {
+            margin-top: 4px;
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .footer-logo img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .footer-social a {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: background-color var(--transition-fast),
+            color var(--transition-fast),
+            border-color var(--transition-fast);
+        }
+
+        .footer-social a:hover {
+            background: var(--accent);
+            color: #1a1a1a;
+            border-color: transparent;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 18px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+
+        @media (max-width: 768px) {
+            .top-bar {
+                padding-inline: 16px;
+            }
+
+            .main-nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px 20px;
+                background: rgba(0, 0, 0, 0.96);
+                display: none;
+            }
+
+            .nav-left,
+            .nav-right {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+
+            .nav-toggle-label {
+                display: flex;
+            }
+
+            .nav-toggle:checked ~ .main-nav {
+                display: flex;
+            }
+
+            .menu-toolbar {
+                justify-content: flex-start;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-inner {
+                padding-inline: 16px;
+            }
+
+            .menu-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ---------- AUTH MODAL (как на других страницах) ---------- */
+
+        .auth-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+        }
+
+        .auth-modal--open {
+            display: block;
+        }
+
+        .auth-modal__overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .auth-modal__dialog {
+            position: relative;
+            margin: 40px auto;
+            max-width: 420px;
+            background: #222222;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 40px 32px 32px;
+            color: var(--text-main);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .auth-modal__back {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form--active {
+            display: block;
+        }
+
+        .auth-form__title {
+            text-align: center;
+            text-transform: uppercase;
+            font-family: "Playfair Display", serif;
+            font-size: 1.4rem;
+            margin-bottom: 32px;
+        }
+
+        .auth-form__field {
+            margin-bottom: 16px;
+        }
+
+        .auth-form__input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #d0d0d0;
+            font-size: 0.95rem;
+            color: #333333;
+        }
+
+        .auth-form__input::placeholder {
+            color: #9b9b9b;
+        }
+
+        .auth-form__checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .auth-form__checkbox input {
+            display: none;
+        }
+
+        .auth-form__checkbox-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid var(--accent);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .auth-form__checkbox input:checked + .auth-form__checkbox-box::before {
+            content: "✔";
+            font-size: 0.75rem;
+        }
+
+        .auth-form__link-text {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .auth-form__submit {
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .auth-form__switch {
+            margin-top: 18px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            .auth-modal__dialog {
+                margin: 30px 16px;
+                padding: 36px 20px 24px;
+            }
+
+            .auth-form__title {
+                font-size: 1.2rem;
+                margin-bottom: 24px;
+            }
+        }
+        .menu-toolbar__icon {
+            margin-right: 10px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .menu-toolbar__icon:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-toolbar__icon--active {
+            color: var(--accent);
+        }
+
+        .menu-empty {
+            padding: 24px 0;
+            color: var(--text-muted);
+        }
+
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <div class="top-bar container">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+        <label for="nav-toggle" class="nav-toggle-label" aria-label="Открыть меню">
+            <span></span>
+        </label>
+
+        <nav class="main-nav">
+            <ul class="nav-left">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="checkout.html">Бронь</a></li>
+                <li><a href="menu.html">Меню</a></li>
+            </ul>
+
+            <div class="logo-wrapper">
+                <img src="img/Logo.svg" alt="Renaissance" />
+            </div>
+
+            <ul class="nav-right">
+                <li>
+                    <a href="#" id="admin-link" data-open-auth="login">Админ</a>
+                </li>
+
+
+                <li id="nav-register-item">
+                    <a href="#" data-open-auth="register">Регистрация</a>
+                </li>
+
+                <li id="nav-logout-item" style="display:none;">
+                    <a href="#" id="logout-link">Выход</a>
+                </li>
+
+                <li>
+                    <a href="profile.html" id="profile-link">Профиль</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <h1 class="menu-title">Shop</h1>
+        </div>
+    </section>
+
+    <!-- MENU / PRODUCTS -->
+    <section class="menu-section">
+        <div class="container">
+            <div class="menu-toolbar">
+                <span class="menu-toolbar__icon" id="cart-toggle" title="Показать корзину">♡</span>
+                <span>Sort By:</span>
+                <div class="menu-sort">
+                    <select class="menu-sort__select" id="products-sort" aria-label="Sort products">
+                        <option value="default">Default Sorting</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name-asc">Name A–Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="menu-grid" id="products-grid"></div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-content">
+        <div class="footer-hours">
+            <p>Понедельник – Четверг: 9am – 10pm</p>
+            <p>Пятница – Суббота: 10am – 11pm</p>
+            <p>Воскресенье: 11am – 9pm</p>
+        </div>
+
+        <div class="footer-logo">
+            <img src="img/Logo.svg" alt="Renaissance" />
+            <div class="footer-bottom">
+                © 2025 Renaissance Restaurant
+            </div>
+        </div>
+
+        <div class="footer-social">
+            <a href="#" aria-label="Twitter">t</a>
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Instagram">in</a>
+            <a href="#" aria-label="YouTube">▶</a>
+        </div>
+    </div>
+</footer>
+<div class="auth-modal" id="auth-modal" aria-hidden="true">
+    <div class="auth-modal__overlay"></div>
+
+    <div class="auth-modal__dialog" role="dialog" aria-modal="true">
+        <button class="auth-modal__back" type="button" data-auth-close aria-label="Закрыть">
+            ←
+        </button>
+
+        <!-- РЕГИСТРАЦИЯ -->
+        <form class="auth-form auth-form--register auth-form--active" data-auth-form="register">
+            <h2 class="auth-form__title">РЕГИСТРАЦИЯ</h2>
+
+            <div class="auth-form__field">
+                <input type="email" class="auth-form__input" placeholder="Email" required />
+            </div>
+
+            <div class="auth-form__field">
+                <input type="password" class="auth-form__input" placeholder="Password" required />
+            </div>
+
+            <label class="auth-form__checkbox">
+                <input type="checkbox" />
+                <span class="auth-form__checkbox-box"></span>
+                <span class="auth-form__checkbox-label">
+          Получать актуальные <span class="auth-form__link-text">новости и уведомления</span>
+        </span>
+            </label>
+
+            <button type="submit" class="btn btn-primary auth-form__submit">
+                ПОДТВЕРДИТЬ
+            </button>
+
+            <button class="auth-form__switch" type="button" data-auth-to="login">
+                УЖЕ ЕСТЬ АККАУНТ?
+            </button>
+        </form>
+
+        <!-- АВТОРИЗАЦИЯ -->
+        <form class="auth-form auth-form--login" data-auth-form="login">
+            <h2 class="auth-form__title">АВТОРИЗАЦИЯ</h2>
+
+            <div class="auth-form__field">
+                <input type="email" class="auth-form__input" placeholder="Email" required />
+            </div>
+
+            <div class="auth-form__field">
+                <input type="password" class="auth-form__input" placeholder="Password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-form__submit">
+                ПОДТВЕРДИТЬ
+            </button>
+
+            <button class="auth-form__switch" type="button" data-auth-to="register">
+                НЕТ АККАУНТА? ЗАРЕГИСТРИРОВАТЬСЯ
+            </button>
+        </form>
+    </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
